@@ -45,6 +45,13 @@ def buy_card():
     #subtracts energy
     #gives player a card
     
+def get_input(min_inp, max_inp):
+    #i need function that prompts for input and checks validitiy, 
+    #if its a bad input, print error message and ask again.
+    #requirements: between max and min
+    #if max and min are both zero, then input needs to be a lenght of at least one.
+    #return value.
+    
 def run_game():
     #main game logic
     
