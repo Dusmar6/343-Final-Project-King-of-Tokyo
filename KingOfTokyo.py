@@ -37,11 +37,19 @@ class Card:
 
     
 class Monster:
-    #TODO
-    #att: name (string), desc(string), character_sound (string) )
-    #no setters, just getters.
-    #constructable by passing in all three attributes
-    #look at card class for structure
+    def init(self, monster_name, monster_description, monster_sound):
+        self.monster_name = monster_name
+        self.monster_description = monster_description
+        self.monster_sound = monster_sound
+
+    def get_monster_name(self):
+        return self.monster_name
+
+    def get_monster_description(self):
+        return self.monster_description
+
+    def get_monster_sound(self):
+        return self.monster_sound
     
 class GameState:
     #TODO
