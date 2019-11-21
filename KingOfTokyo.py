@@ -7,7 +7,7 @@ import random
 
 class Player:
     #TODO
-    #att: Monster (single monster object), Cards (list of Card Objects, init to empty), hearts (int, init to 10), points (int, init to 0), energy (int, init to 0), alive (bool, init to true)
+    #att: Monster (single monster object), Cards (list of Card Objects, init to empty), hearts (int, init to 10), points (int, init to 0), energy (int, init to 0), alive (bool, init to 0)
     #object is created by passing only a monster object to constructor.
     #basic setters and getters for all
     #for Cards, make functions: add_card(card object), remove_card(card object). if succesful, return 1, if unsuccesful (like removing a card from an empty list), return -1
@@ -44,6 +44,15 @@ class Monster:
 class GameState:
     #TODO
     #Holds all the players, current turn, board positions, etc..
+    
+def load_monsters():
+    m = []
+    m.add(new Monster("Alienoid", "He comes from an ancient alien race, known across the galaxy for their stench!", "Bleh!"))
+    m.add(new Monster("...."))
+    #add rest...
+    
+    
+    return m
 
 def setup():
     #get # of players, names, monsters, roll order
