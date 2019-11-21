@@ -10,7 +10,7 @@ class Player:
     #att: Monster (single monster object), Cards (list of Card Objects, init to empty), hearts (int, init to 10), points (int, init to 0), energy (int, init to 0), alive (bool, init to 0), in_tokyo (bool, init to false)
     #object is created by passing only a monster object to constructor.
     #basic setters and getters for all
-    #for Cards, make functions: add_card(card object), remove_card(card object). if succesful, return 1, if unsuccesful (like removing a card from an empty list), return -1
+    #make functions: add_card(card object), remove_card(card object). if succesful, return 1, if unsuccesful (like removing a card from an empty list), return -1
     #for Hearts, Points, Energy: make functions that increase and decrease the amount by a given parameter (i.e add_heart(int)).
     #   make sure Points and Energy cannot go below 0. If hearts goes below 0, set alive attribute to false
 
