@@ -51,7 +51,7 @@ def load_monsters():
     m = []
     m.add(new Monster("Alienoid", "He comes from an ancient alien race, known across the galaxy for their stench!", "Bleh!"))
     m.add(new Monster("...."))
-    #add rest...
+    #add rest... get info from user guide
     
     
     return m
