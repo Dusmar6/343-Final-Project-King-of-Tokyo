@@ -7,7 +7,7 @@ import random
 
 class Player:
     #TODO
-    #att: Monster (single monster object), Cards (list of Card Objects, init to empty), hearts (int, init to 10), points (int, init to 0), energy (int, init to 0), alive (bool, init to 0)
+    #att: Monster (single monster object), Cards (list of Card Objects, init to empty), hearts (int, init to 10), points (int, init to 0), energy (int, init to 0), alive (bool, init to true)
     #object is created by passing only a monster object to constructor.
     #basic setters and getters for all
     #for Cards, make functions: add_card(card object), remove_card(card object). if succesful, return 1, if unsuccesful (like removing a card from an empty list), return -1
