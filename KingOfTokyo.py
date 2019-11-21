@@ -7,7 +7,7 @@ import random
 
 class Player:
     #TODO
-    #att: Monster (single monster object), Cards (list of Card Objects, init to empty), hearts (int, init to 10), points (int, init to 0), energy (int, init to 0), alive (bool, init to 0)
+    #att: Monster (single monster object), Cards (list of Card Objects, init to empty), hearts (int, init to 10), points (int, init to 0), energy (int, init to 0), alive (bool, init to 0), in_tokyo (bool, init to false)
     #object is created by passing only a monster object to constructor.
     #basic setters and getters for all
     #for Cards, make functions: add_card(card object), remove_card(card object). if succesful, return 1, if unsuccesful (like removing a card from an empty list), return -1
@@ -33,7 +33,7 @@ class Card:
     def get_ability_desc(self):
         return self.ability_desc
     
-    #will need to run a check for cards in play on each turn and have a system to apply these effects
+    #will need to run a check for cards in play on each turn and have a system to apply these effects, needs extra attributes to implement effects
 
     
 class Monster:
@@ -46,6 +46,10 @@ class Monster:
 class GameState:
     #TODO
     #Holds all the players, current turn, board positions, etc..
+    #player count (int)
+    #graveyard (list monster) dead players, removed from players
+    #players (list player in order of roll order)
+    #active_cards (list Card) #think of ways to implement. Needs to run check each round for modifiers... 
     
 def load_monsters():
     m = []
@@ -57,12 +61,13 @@ def load_monsters():
     return m
 
 def setup():
-    #get # of players, names, monsters, roll order
+    #get # of players, monsters, roll order
     #load into objects, return gamestate to run game
     #put into a pysimpleGUI if enough time
     
 def roll_dice():
     #will be a fairly complex system to run the dice roll functionality
+    #implement after game logic so it meshes well
 
 def buy_card():
     #subtracts energy
@@ -83,6 +88,17 @@ def get_input(min_inp, max_inp):
 def randomize(x):
     return random.shuffle(x)
 
+def checkWin():
+    #checks gamestate to see if a player has won
+    #called by run_game
+    
+def deal_damage():
+    #takes location of the monsters as parameter (inside,outside)
+    #checks if monster is alive upon damage. if dead. run kill monster
+    
+def kill_monster():
+    #takes monster as parameter. removes him from the game
+    
 def run_game():
     #main game logic
     
