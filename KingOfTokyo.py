@@ -40,6 +40,8 @@ class Monster:
     #TODO
     #att: name (string), desc(string), character_sound (string) )
     #no setters, just getters.
+    #constructable by passing in all three attributes
+    #look at card class for structure
     
 class GameState:
     #TODO
