@@ -60,12 +60,14 @@ class GameState:
     #active_cards (list Card) #think of ways to implement. Needs to run check each round for modifiers... 
     
 def load_monsters():
+    #Add all the avaliable monsters that are from the game and return an array 
     m = []
-    m.add(new Monster("Alienoid", "He comes from an ancient alien race, known across the galaxy for their stench!", "Bleh!"))
-    m.add(new Monster("...."))
-    #add rest... get info from user guide
-    
-    
+    m.append(Monster("Alienoid", "He comes from an ancient alien race, known across the galaxy for their stench!", "Bleh!"))
+    m.append(Monster("Cyber Kitty", "A mecha feline with a pink suit of armour and razor sharp claws. Careful she's a bad kitty!", "Meow."))
+    m.append(Monster("Giga Zaur", "He's a fearless, cold-blooded, Tokyo-stomping machine. (And some say he's the best kisser). Watch out for this lizard.", "Rawr!"))
+    m.append(Monster("Space Penguin", "A penguin? In space? He's the result of a horrific gene-splicing experiment gone wrong involving penguin and space DNA.", "Squeak!"))
+    m.append(Monster("Meka Dragon", "Do robot dragons still need to eat? We aren't sure, but you should take a few steps back just to be safe.", "Rawr!"))
+    m.append(Monster("Mongo", "He has no fear. He has no weaknessess. He's 40 feet tall and is composed of over 90 tons of delicious gingerbread, and he's coming for you.", "Run! Run! As fast as you can"))
     return m
 
 def setup():
