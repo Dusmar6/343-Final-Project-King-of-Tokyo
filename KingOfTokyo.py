@@ -202,9 +202,14 @@ class GameState:
         return self.player_list[self.current_turn]
     
     def tokyo_full(self):
-        if len(self.players_in_tokyo()) < 2:
-            return False
-        return True
+        if self.player_count>2:
+            if len(self.players_in_tokyo()) < 2:
+                return False
+            return True
+        if self.player_count<=2:
+            if len(self.players_in_tokyo()) < 1:
+                return False
+            return True
     
     
 def load_monsters():
@@ -280,8 +285,9 @@ def setup():
             
 def print_dice(rolled):
     
-    print("/nYou rolled: ")
-    for num in rolled:
+    print("\nYou rolled: ")
+    for num in range(len(rolled)):
+        print(str(num+1)+". ", end='')
         if rolled[num] == 1: print("Victory Point (1)")
         if rolled[num] == 2: print("Victory Point (2)")
         if rolled[num] == 3: print("Victory Point (3)")
@@ -293,24 +299,29 @@ def print_dice(rolled):
 def roll_dice():
     rolled = []
     for num in range(6):
-        rolled[num] = random.randInt(1,6)
+        rolled.append(random.randint(1,6))
     print_dice(rolled)
+    
     rolled = re_roll(rolled)
     print_dice(rolled)
+    print("\nLast Reroll!")
     rolled = re_roll(rolled)
     return resolve_dice(rolled)
     
 
     
 def re_roll(rolled):
-    print("/nEnter the dice you wish to reroll (1234): ")
+    print("\nEnter the dice you wish to reroll (1234): ")
     re = str(input())
     for num in range(1,7):
-        if str(num) in re: rolled[num-1] = random.randInt(1,6)
+        if str(num) in re: rolled[num-1] = random.randint(1,6)
     return rolled  
     
     
 def resolve_dice(rolled):
+    
+    print_dice(rolled)
+    
     points = 0
     damage = 0
     heal = 0
@@ -377,13 +388,15 @@ def run_game(state):
         
         
         print(state.current_player().Monster.monster_sound, "It's", state.current_player().Monster.monster_name+"'s turn!" )
-        if state.current_player().in_tokyo():
+        sleep(1)
+        if state.current_player().in_tokyo:
             print("You gained 2 Victory Points for starting your turn already in Tokyo!")
             state.add_points_current_player(2)
         if not state.tokyo_full():
             state.current_player().enter_tokyo()
             print("\n--", state.current_player().Monster.monster_name, "has invaded Tokyo! --")
-            
+            print("You gained 1 Victory Point for entering Tokyo!")
+            state.add_points_current_player(1)
         print("\nMonsters in Tokyo: ")
         m = state.players_in_tokyo()
         for p in m:
@@ -393,7 +406,8 @@ def run_game(state):
         m = state.players_outside_tokyo()
         for p in m:
             print( p.Monster.monster_name, "- VICTORY POINTS:", p.get_points(), "HEARTS:", p.get_hearts())
-            
+        
+        sleep(1)
         
         print("\n--Press enter to roll dice--")
         k = input()
@@ -407,7 +421,7 @@ def run_game(state):
         print("\n", state.current_player().Monster.monster_name, "earned", points, "victory points.")
         state.add_points_current_player(points)
         
-        if not state.current_player().in_tokyo():
+        if not state.current_player().in_tokyo:
             print("\n", state.current_player().Monster.monster_name, "healed", heal, "hearts.")
             state.current_player().heal(heal)
             
@@ -415,7 +429,7 @@ def run_game(state):
         state.current_player().add_energy(energy)
         
         
-        if state.current_player().in_tokyo():
+        if state.current_player().in_tokyo:
             print("\n", state.current_player().Monster.monster_name, "dealt", damage, "to monsters outside Tokyo.")
             state.damage_players_outside_tokyo(damage)
                 
@@ -424,7 +438,7 @@ def run_game(state):
             state.damage_players__tokyo(damage)
         
         
-        
+        sleep(5)
         
         state.next_turn()
         
@@ -436,7 +450,6 @@ def main():
     
     
 main()
-
 
 
 
