@@ -2,9 +2,6 @@
 from time import sleep
 import random
 
-
-
-
 class Player:
 
     def __init__(self, monster):
@@ -37,6 +34,12 @@ class Player:
     
     def in_tokyo(self):
         return self.in_tokyo
+    
+    def enter_tokyo(self):
+        self.in_tokyo = True
+        
+    def exit_tokyo(self):
+        self.in_tokyo = False
     
     def kill(self):
         self.alive = False
@@ -79,6 +82,7 @@ class Player:
         else:
             self.cards.remove(card)
             return True
+    
             
 
 class Card:
@@ -118,6 +122,8 @@ class Monster:
     def get_monster_sound(self):
         return self.monster_sound
     
+    
+    
 class GameState:
     def __init__(self, player_list):
         self.player_list = player_list
@@ -143,11 +149,29 @@ class GameState:
         else:
             self.current_turn+=1
             
+    def add_points_current_player(self, x):
+        self.current_player().add_points(x)
+        self.check_win()
+        
+        
+    def add_points_player(self, player, x):
+        player.add_points(x)
+        self.check_win()
+        
+        
     def check_win(self):
         for player in self.player_list:
             if player.points>= 20:
-                print(player.monster.monster_name, " has taken over Tokyo!")
-    
+                print(player.monster.monster_name, " has reached 20 victory points and has taken over Tokyo!")
+                
+                
+    def check_death(self):
+        for p in self.player_list:
+            if not p.alive:
+                print(p.Monster.monster_name, "has died!")
+                self.player_list.remove(p)
+                self.graveyard.append(p)
+                      
     def players_in_tokyo(self):
         m = []
         for p in self.player_list:
@@ -161,15 +185,27 @@ class GameState:
             if p.in_tokyo == False:
                 m.append(p)
         return m
+    
+    def damage_players_in_tokyo(self, x):
+        m = self.players_in_tokyo()
+        for p in m:
+            p.take_damage(x)
+        self.check_death()
+    
+    def damage_players_outside_tokyo(self, x):
+        m = self.players_outside_tokyo()
+        for p in m:
+            p.take_damage(x)
+        self.check_death()
         
-            
-        
-    #TODO
-    #Holds all the players, current turn, board positions, etc..
-    #player count (int)
-    #graveyard (list monster) dead players, removed from players
-    #players (list player in order of roll order)
-    #active_cards (list Card) #think of ways to implement. Needs to run check each round for modifiers... 
+    def current_player(self):
+        return self.player_list[self.current_turn]
+    
+    def tokyo_full(self):
+        if len(self.players_in_tokyo()) < 2:
+            return False
+        return True
+    
     
 def load_monsters():
     #Add all the avaliable monsters that are from the game and return an array 
@@ -227,15 +263,78 @@ def setup():
         sleep(1)
     print("... Are you ready?", end = " ")
     sleep(1)
-    print("Lets go!")
+    scroll()
+    print("""
+  _      ______ _______ _____    _____  ____  
+ | |    |  ____|__   __/ ____|  / ____|/ __ \ 
+ | |    | |__     | | | (___   | |  __| |  | |
+ | |    |  __|    | |  \___ \  | | |_ | |  | |
+ | |____| |____   | |  ____) | | |__| | |__| |
+ |______|______|  |_| |_____/   \_____|\____/ 
+                                              
+                                              
+""")
+    sleep(1)
     game_state = GameState(players)
     return game_state
             
+def print_dice(rolled):
+    
+    print("/nYou rolled: ")
+    for num in rolled:
+        if rolled[num] == 1: print("Victory Point (1)")
+        if rolled[num] == 2: print("Victory Point (2)")
+        if rolled[num] == 3: print("Victory Point (3)")
+        if rolled[num] == 4: print("Attack Damage (1)")
+        if rolled[num] == 5: print("Heart (1)")
+        if rolled[num] == 6: print("Energy (1)")
+    
+
+def roll_dice():
+    rolled = []
+    for num in range(6):
+        rolled[num] = random.randInt(1,6)
+    print_dice(rolled)
+    rolled = re_roll(rolled)
+    print_dice(rolled)
+    rolled = re_roll(rolled)
+    return resolve_dice(rolled)
+    
+
+    
+def re_roll(rolled):
+    print("/nEnter the dice you wish to reroll (1234): ")
+    re = str(input())
+    for num in range(1,7):
+        if str(num) in re: rolled[num-1] = random.randInt(1,6)
+    return rolled  
+    
+    
+def resolve_dice(rolled):
+    points = 0
+    damage = 0
+    heal = 0
+    energy = 0
+    
+    for num in range(1, 4):
+        if rolled.count(num)>=3:
+            points+= num
+            if rolled.count(num)>3:
+
+                points+= rolled.count(num)-3
+                
+    damage+= rolled.count(4)
+    heal+= rolled.count(5)
+    energy+= rolled.count(6)
+    
+    
+    
+    return points, heal, damage, energy
+
+    
 
 
-#def roll_dice():
-    #will be a fairly complex system to run the dice roll functionality
-    #implement after game logic so it meshes well
+
 
 #def buy_card():
     #subtracts energy
@@ -258,22 +357,104 @@ def get_input(min_inp, max_inp):
 
 def randomize(x):
     return random.shuffle(x)
- 
-    
-def deal_damage():
-    #takes location of the monsters as parameter (inside,outside)
-    #checks if monster is alive upon damage. if dead. run kill monster
-    
-def kill_monster():
+
+#    
+#def deal_damage():
+#    #takes location of the monsters as parameter (inside,outside)
+#    #checks if monster is alive upon damage. if dead. run kill monster
+#    
+#def kill_monster():
     #takes monster as parameter. removes him from the game
     
-def run_game():
-    #main game logic
+    
+    
+    
+def run_game(state):
+    
+    winner = None
+    while winner == None:
+        scroll()
+        
+        
+        print(state.current_player().Monster.monster_sound, "It's", state.current_player().Monster.monster_name+"'s turn!" )
+        if state.current_player().in_tokyo():
+            print("You gained 2 Victory Points for starting your turn already in Tokyo!")
+            state.add_points_current_player(2)
+        if not state.tokyo_full():
+            state.current_player().enter_tokyo()
+            print("\n--", state.current_player().Monster.monster_name, "has invaded Tokyo! --")
+            
+        print("\nMonsters in Tokyo: ")
+        m = state.players_in_tokyo()
+        for p in m:
+            print( p.Monster.monster_name, "- VICTORY POINTS:", p.get_points(), "HEARTS:", p.get_hearts())
+        
+        print("\nMonsters outside Tokyo: ")
+        m = state.players_outside_tokyo()
+        for p in m:
+            print( p.Monster.monster_name, "- VICTORY POINTS:", p.get_points(), "HEARTS:", p.get_hearts())
+            
+        
+        print("\n--Press enter to roll dice--")
+        k = input()
+        results = roll_dice()
+        
+        points = results[0]
+        heal   = results[1]
+        damage = results[2]
+        energy = results[3]
+        
+        print("\n", state.current_player().Monster.monster_name, "earned", points, "victory points.")
+        state.add_points_current_player(points)
+        
+        if not state.current_player().in_tokyo():
+            print("\n", state.current_player().Monster.monster_name, "healed", heal, "hearts.")
+            state.current_player().heal(heal)
+            
+        print("\n", state.current_player().Monster.monster_name, "gained", energy, "energy.")
+        state.current_player().add_energy(energy)
+        
+        
+        if state.current_player().in_tokyo():
+            print("\n", state.current_player().Monster.monster_name, "dealt", damage, "to monsters outside Tokyo.")
+            state.damage_players_outside_tokyo(damage)
+                
+        else:
+            print("\n", state.current_player().Monster.monster_name, "dealt", damage, "to monsters inside Tokyo.")
+            state.damage_players__tokyo(damage)
+        
+        
+        
+        
+        state.next_turn()
+        
     
 def main():
-    winner = run_game(setup())
+    run_game(setup())
     
     
     
     
 main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
