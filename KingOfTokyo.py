@@ -706,12 +706,14 @@ def run_game(state):
             else:
                 print("\n---", state.current_player().Monster.monster_name, "dealt", damage, "damage to monsters inside Tokyo.---")
                 state.damage_players_in_tokyo(damage)
-                for p in state.players_in_tokyo():
-                    print("\n", p.Monster.monster_name, "has taken damage. Would",p.Monster.monster_name,"like to leave Tokyo? (type 'yes' for yes, simply hit enter if no)")
-                    answer = input()
-                    if answer == "yes":
-                        p.exit_tokyo()
-                        print("\n--", p.Monster.monster_name, "has left Tokyo...--")
+                
+                if damage>1:
+                    for p in state.players_in_tokyo():
+                        print("\n", p.Monster.monster_name, "has taken damage. Would",p.Monster.monster_name,"like to leave Tokyo? (type 'yes' for yes, simply hit enter if no)")
+                        answer = input()
+                        if answer == "yes":
+                            p.exit_tokyo()
+                            print("\n--", p.Monster.monster_name, "has left Tokyo...--")
             post_div()
         print("\nPress enter to continue")
         k = input()
@@ -730,5 +732,8 @@ def main():
     
     
 main()
+
+
+
 
 
