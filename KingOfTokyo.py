@@ -2,15 +2,6 @@
 from time import sleep
 import random
 
-
-
-cards = []
-
-
-
-
-
-
 class Player:
 
     def __init__(self, monster):
