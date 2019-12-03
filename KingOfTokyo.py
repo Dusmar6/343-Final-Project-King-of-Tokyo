@@ -316,7 +316,8 @@ def setup():
     monsters_playing = []
     scroll()
     pre_div()
-    print("Welcome to King Of Tokyo! The aim of the game is to take over Tokyo and earn the most points. \nThe first monster to get 20 victory points is the winner!")
+    print_king()
+    print("\nWelcome to King Of Tokyo! The aim of the game is to take over Tokyo and earn the most points. \nThe first monster to get 20 victory points is the winner!")
     post_div()
     sleep(1)
     print("Enter the number of players (2-6): ")
@@ -551,17 +552,8 @@ def buy(state, pick):
                     return True
         
     
-    
-def run_game(state):
-    global cards
-
-    state.fill_deck()
-    
-    winner = None
-    while winner == None:
-        scroll()
-        
-        print("""
+def print_king():
+    print("""
               
   _  _______ _   _  _____     ____  ______   _______ ____  _  ____     ______  
  | |/ /_   _| \ | |/ ____|   / __ \|  ____| |__   __/ __ \| |/ /\ \   / / __ \ 
@@ -572,6 +564,17 @@ def run_game(state):
                                                                                
                                                                                
 """)
+    
+def run_game(state):
+    global cards
+
+    state.fill_deck()
+    
+    winner = None
+    while winner == None:
+        scroll()
+        
+        print_king()
         print("\n\n",state.current_player().Monster.monster_sound, "It's", state.current_player().Monster.monster_name+"'s turn!" )
         sleep(1)
         if state.current_player().in_tokyo:
