@@ -27,7 +27,7 @@ class Player:
         return self.points
     
     def get_energy(self):
-        return self.points
+        return self.energy
     
     def alive(self):
         return self.alive
@@ -51,7 +51,7 @@ class Player:
             self.hearts = self.hearts + amount
        
     def take_damage(self, amount):
-        if(amount > self.hearts):
+        if(amount >= self.hearts):
             self.hearts = 0
             self.kill()
         else:
@@ -61,7 +61,7 @@ class Player:
         self.points = self.points + amount
     
     def add_energy(self, amount):
-        self.energy = self.energy + amount
+        self.energy += amount
         
     def lose_energy(self, amount):
         if(amount > self.energy):
@@ -170,29 +170,14 @@ class GameState:
     def add_points_player(self, player, x):
         player.add_points(x)
         self.check_win()
-        
-        
+    
     def check_win(self):
         for player in self.player_list:
             if player.points>= 20:
-                print(player.monster.monster_name, " has reached 20 victory points and has taken over Tokyo!")
-                print("""
-
-   _____ ____  _   _  _____ _____         _______ _____ 
-  / ____/ __ \| \ | |/ ____|  __ \     /\|__   __/ ____|
- | |   | |  | |  \| | |  __| |__) |   /  \  | | | (___  
- | |   | |  | | . ` | | |_ |  _  /   / /\ \ | |  \___ \ 
- | |___| |__| | |\  | |__| | | \ \  / ____ \| |  ____) |
-  \_____\____/|_| \_|\_____|_|  \_\/_/    \_\_| |_____/ 
-                                                        
-                                    """                    
-)
-                print("\n\nPlay again? (y/n)")
-                inp = input()
-                if inp == "y" or inp == "yes":
-                    main()
-                else:
-                    sys.exit(0)
+                congrats(player)
+                
+        if len(self.player_list)==1:
+            congrats(self.player_list[0])
                 
     def check_death(self):
         for p in self.player_list:
@@ -268,6 +253,26 @@ class GameState:
                 self.deck.append(c)
 
 
+def congrats(player):
+    print(player.monster.monster_name, " has taken over Tokyo and won the game!!")
+    print("""
+
+   _____ ____  _   _  _____ _____         _______ _____ 
+  / ____/ __ \| \ | |/ ____|  __ \     /\|__   __/ ____|
+ | |   | |  | |  \| | |  __| |__) |   /  \  | | | (___  
+ | |   | |  | | . ` | | |_ |  _  /   / /\ \ | |  \___ \ 
+ | |___| |__| | |\  | |__| | | \ \  / ____ \| |  ____) |
+  \_____\____/|_| \_|\_____|_|  \_\/_/    \_\_| |_____/ 
+                                                        
+                                    """                    
+)
+    print("\n\nPlay again? (y/n)")
+    inp = input()
+    if inp == "y" or inp == "yes":
+        main()
+    else:
+        sys.exit(0)
+    
     
 def load_monsters():
     #Add all the avaliable monsters that are from the game and return an array 
@@ -587,7 +592,7 @@ def run_game(state):
         pre_div()
         print("Cards Available:")
         for card in state.deck:
-            print(card.name, "-", card.ability_desc)
+            print("(", card.cost, ")", card.name, "-", card.ability_desc)
         post_div()
         
         print("\n--- Monsters in Tokyo: ")
@@ -633,13 +638,13 @@ def run_game(state):
                     else:
                          print("\n\nUnable to purchase card. Make sure you have enough energy and that you have room if its a keep card.\n\n\n")
                 if choose == 2:
-                    if buy(state, 1):
+                    if buy(state, 2):
                         cont = False
                         break
                     else:
                          print("\n\nUnable to purchase card. Make sure you have enough energy and that you have room if its a keep card.\n\n\n")
                 if choose == 3:
-                    if buy(state, 1):
+                    if buy(state, 3):
                         cont = False
                         break
                     else:
@@ -682,7 +687,7 @@ def run_game(state):
                 state.current_player().remove_card_by_name("Hate Healer")
             
             pre_div()
-            print("\n---", state.current_player().Monster.monster_name, "earned", points, "victory points.---")
+            print("---", state.current_player().Monster.monster_name, "earned", points, "victory points.---")
             state.add_points_current_player(points)
             
             if not state.current_player().in_tokyo:
@@ -701,7 +706,7 @@ def run_game(state):
                 print("\n---", state.current_player().Monster.monster_name, "dealt", damage, "damage to monsters inside Tokyo.---")
                 state.damage_players_in_tokyo(damage)
                 
-                if damage>1:
+                if damage>0:
                     for p in state.players_in_tokyo():
                         print("\n", p.Monster.monster_name, "has taken damage. Would",p.Monster.monster_name,"like to leave Tokyo? (type 'yes' for yes, simply hit enter if no)")
                         answer = input()
@@ -726,7 +731,6 @@ def main():
     
     
 main()
-
 
 
 
