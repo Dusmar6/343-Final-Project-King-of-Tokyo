@@ -320,9 +320,9 @@ def setup():
     monsters = load_monsters()
     monsters_playing = []
     scroll()
-    pre_div()
     print_king()
-    print("\nWelcome to King Of Tokyo! The aim of the game is to take over Tokyo and earn the most points. \nThe first monster to get 20 victory points is the winner!")
+    pre_div()
+    print("Welcome to King Of Tokyo! The aim of the game is to take over Tokyo and earn the most points. \nThe first monster to get 20 victory points is the winner!")
     post_div()
     sleep(1)
     print("Enter the number of players (2-6): ")
@@ -502,7 +502,7 @@ def buy(state, pick):
                             if p!= state.current_player():
                                 p.take_damage(2)
                     state.check_death()
-                            
+                    state.check_win()
                     
                     
                     state.deck.pop(pick-1)
@@ -528,6 +528,7 @@ def buy(state, pick):
                         if p != state.current_player():
                             p.take_damage(2)
                     state.check_death()
+                    state.check_win()
                     state.deck.pop(pick-1)
                     state.fill_deck()
                     return True
@@ -543,7 +544,7 @@ def buy(state, pick):
                     state.player_list(don-1).take_damage(5)
                     
                     state.check_death()
-                    
+                    state.check_win()
                     state.deck.pop(pick-1)
                     state.fill_deck()
                     return True
@@ -552,6 +553,8 @@ def buy(state, pick):
                     print("\n-- You've bought", state.deck[pick-1].name+". --")
                     print("\n-- You have been granted 3 victory points! --")
                     state.add_points_current_player(3)
+                    state.check_death()
+                    state.check_win()
                     state.deck.pop(pick-1)
                     state.fill_deck()
                     return True
@@ -572,7 +575,7 @@ def print_king():
     
 def run_game(state):
     global cards
-
+    state.check_win()
     state.fill_deck()
     
     winner = None
@@ -722,7 +725,7 @@ def run_game(state):
             state.next_turn()
         state.next_turn()
         
-
+        state.check_win()
     
 def main():
     run_game(setup())
