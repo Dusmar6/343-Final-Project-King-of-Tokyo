@@ -351,8 +351,9 @@ def setup():
     for p in players:
         print(p.Monster.monster_name)
         sleep(1)
-    print("... Are you ready?", end = " ")
-    sleep(1)
+        
+    print("... Are you ready?")
+    sleep(2)
     scroll()
     print("""
   _      ______ _______ _____    _____  ____  
@@ -433,8 +434,10 @@ def get_input(min_inp, max_inp):
             print("Please enter a valid input" )
             user_Input = input("")
     else:
-
-        user_Input = int(input())
+        try:
+            user_Input = int(input())
+        except:
+            user_Input = get_input(min_inp, max_inp)
         while(user_Input < min_inp or user_Input > max_inp):
             print("Please enter a valid input" )
             user_Input = int(input())
